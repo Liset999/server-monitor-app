@@ -1,121 +1,380 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MonitorApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MonitorApp extends StatelessWidget {
+  const MonitorApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'Server Monitor',
+      theme: ThemeData.dark(),
+      home: const MonitorScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class MonitorScreen extends StatefulWidget {
+  const MonitorScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MonitorScreen> createState() => _MonitorScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MonitorScreenState extends State<MonitorScreen> {
+  // --- 动态数据变量 ---
+  String _cpu = "0";
+  String _ram = "0";
+  String _disk = "0";
+  String _gpu = "0";
+  String _statusText = "正在连接...";
+  Color _statusColor = Colors.orange;
+  Timer? _timer;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  // ⚠️⚠️⚠️ 只有这里需要改 IP ⚠️⚠️⚠️
+  final String _baseUrl = 'http://10.161.245.81:5000';
+
+  // --- 核心：配置信息的“缓存记忆” ---
+  // 如果这个变量有值，就不去网络请求；如果是 null，才去请求
+  Future<Map<String, dynamic>>? _specsMemo;
+
+  @override
+  void initState() {
+    super.initState();
+    // 启动每秒轮询
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) => _fetchStatus(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  // --- 1. 获取动态数据 (轮询) ---
+  Future<void> _fetchStatus() async {
+    try {
+      final response = await http.get(Uri.parse('$_baseUrl/status'));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          _cpu = double.parse(data['cpu'].toString()).toStringAsFixed(1);
+          _ram = double.parse(data['ram'].toString()).toStringAsFixed(1);
+          _disk = double.parse(data['disk'].toString()).toStringAsFixed(1);
+          _gpu = double.parse(data['gpu'].toString()).toStringAsFixed(1);
+          _statusText = "🟢 系统正常";
+          _statusColor = Colors.greenAccent;
+
+          if (double.parse(_cpu) > 80 || double.parse(_gpu) > 80) {
+            _statusColor = Colors.redAccent;
+            _statusText = "🔥 高温预警";
+          }
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _statusText = "🔴 连接断开";
+        _statusColor = Colors.grey;
+      });
+    }
+  }
+
+  // --- 2. 获取配置数据 (网络请求函数) ---
+  Future<Map<String, dynamic>> _fetchSpecsFromNetwork() async {
+    final response = await http.get(Uri.parse('$_baseUrl/specs'));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } else {
+      throw Exception('Server Error');
+    }
+  }
+
+  // --- 3. 显示弹窗 (带缓存逻辑) ---
+  Future<void> _showSpecs(BuildContext context) async {
+    // 逻辑：如果记忆为空，才去发起请求
+    if (_specsMemo == null) {
+      _specsMemo = _fetchSpecsFromNetwork();
+    }
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent, // 背景交给子组件处理
+      isScrollControlled: true,
+      builder: (context) {
+        // 使用 StatefulBuilder 为了让弹窗内部可以响应刷新按钮
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return SpecsSheet(
+              specsFuture: _specsMemo!, // 把记好的数据传进去
+              onRefresh: () {
+                // 当用户点击刷新时：
+                // 1. 更新主界面的记忆 (强制重新获取)
+                setState(() {
+                  _specsMemo = _fetchSpecsFromNetwork();
+                });
+                // 2. 更新弹窗界面 (让它转圈并显示新数据)
+                setModalState(() {});
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
+      backgroundColor: const Color(0xFF0F172A),
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('Server Monitor'),
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline, color: Colors.white),
+            onPressed: () => _showSpecs(context),
+          ),
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: _statusColor.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: _statusColor),
+                ),
+                child: Text(_statusText, style: TextStyle(color: _statusColor)),
+              ),
+              const SizedBox(height: 30),
+              _buildGauge("CPU 核心", "$_cpu%", Colors.blueAccent, Icons.memory),
+              const SizedBox(height: 20),
+              _buildGauge(
+                "内存 RAM",
+                "$_ram%",
+                Colors.purpleAccent,
+                Icons.storage,
+              ),
+              const SizedBox(height: 20),
+              _buildGauge(
+                "显卡 GPU",
+                "$_gpu%",
+                Colors.orangeAccent,
+                Icons.videogame_asset,
+              ),
+              const SizedBox(height: 20),
+              _buildGauge("磁盘空间", "$_disk%", Colors.grey, Icons.pie_chart),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    );
+  }
+
+  Widget _buildGauge(String label, String value, Color color, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color, size: 30),
+              const SizedBox(width: 15),
+              Text(
+                label,
+                style: const TextStyle(color: Colors.white70, fontSize: 18),
+              ),
+            ],
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              color: color,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// --- 独立的弹窗组件 (只负责显示) ---
+class SpecsSheet extends StatelessWidget {
+  final Future<Map<String, dynamic>> specsFuture;
+  final VoidCallback onRefresh;
+
+  const SpecsSheet({
+    super.key,
+    required this.specsFuture,
+    required this.onRefresh,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.6,
+      minChildSize: 0.4,
+      maxChildSize: 0.8,
+      expand: false,
+      builder: (_, controller) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFF1E293B),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: FutureBuilder<Map<String, dynamic>>(
+            future: specsFuture,
+            builder: (context, snapshot) {
+              // 1. 加载中
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              // 2. 加载失败
+              if (snapshot.hasError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        color: Colors.redAccent,
+                        size: 40,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        "获取失败: ${snapshot.error}",
+                        style: const TextStyle(color: Colors.white70),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: onRefresh,
+                        child: const Text("重试"),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              // 3. 加载成功
+              final specs = snapshot.data!;
+              return SingleChildScrollView(
+                controller: controller,
+                padding: const EdgeInsets.all(30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Colors.white24,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "💻 本机配置",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.refresh,
+                            color: Colors.blueAccent,
+                          ),
+                          onPressed: () {
+                            onRefresh(); // 触发刷新
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("正在刷新配置..."),
+                                duration: Duration(milliseconds: 500),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    _buildSpecRow(Icons.laptop_windows, "操作系统", specs['os']),
+                    _buildSpecRow(Icons.memory, "CPU 型号", specs['cpu']),
+                    _buildSpecRow(Icons.grid_view, "核心数", specs['cores']),
+                    _buildSpecRow(Icons.storage, "总内存", specs['ram']),
+                    _buildSpecRow(
+                      Icons.videogame_asset,
+                      "显卡 GPU",
+                      specs['gpu'],
+                    ),
+
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSpecRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Colors.blueAccent, size: 28),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(color: Colors.white54, fontSize: 14),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    height: 1.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
