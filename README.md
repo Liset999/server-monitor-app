@@ -29,7 +29,7 @@ pip install -r requirements.txt
 
 # 2. 启动探针
 python monitor.py
-
+```
 ### 2. 启动客户端 (App)
 确保你安装了 Flutter SDK。
 
