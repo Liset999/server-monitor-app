@@ -1,44 +1,48 @@
-# Server Monitor (SRE 练手项目)
+# 🖥️ Server Monitor (Cross-Platform)
 
-这是一个基于 **Flutter** (移动端) 和 **Python Flask** (服务端) 开发的局域网服务器监控系统。
-它可以实时监控 Windows 服务器的硬件状态，并支持查看详细的硬件配置信息。
+![Flutter](https://img.shields.io/badge/Flutter-3.0%2B-02569B?logo=flutter)
+![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python)
+![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android-lightgrey)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## 📸 功能特性 (Features)
+一个现代化的、跨平台的服务器性能监控应用。
+服务端使用 **Python (Flask + Psutil)** 采集数据，客户端使用 **Flutter** 构建，支持实时波形图、进程管理及远程电源控制。
 
-* **实时监控**：每秒刷新 CPU、内存、GPU、磁盘的使用率。
-* **硬件详情**：自动识别 Windows 11/10 版本，精准获取 CPU 型号 (如 AMD Ryzen 9) 及核心数。
-* **智能缓存**：配置信息支持本地缓存，减少网络请求，提升体验。
-* **报警机制**：当 CPU 或 GPU 负载超过 80% 时，App 界面自动变红报警。
-* **交互优化**：支持下拉刷新配置信息，底部弹窗自适应高度。
+## ✨ 核心功能 (Features)
+
+- 📊 **实时仪表盘**：毫秒级监控 CPU、内存、磁盘及 GPU 温度。
+- 📈 **动态波形图**：支持 CPU、内存、网络流量 (KB/s, MB/s) 的 60秒 实时趋势。
+- ⚡ **网速监控**：双通道显示上传/下载速率，智能单位切换。
+- 🎮 **进程管理**：查看服务器运行进程，支持按内存排序及**远程杀进程**。
+- 🔌 **远程控制**：支持一键 🔒锁定、🔄重启、🛑关机 (带确认弹窗)。
+- 🎨 **多主题切换**：内置 深海蓝、赛博紫、黑客绿 等 5 款渐变皮肤。
 
 ## 🛠️ 技术栈 (Tech Stack)
 
-* **Backend**: Python 3, Flask, psutil, GPUtil, py-cpuinfo
-* **Frontend**: Flutter, Dart, HTTP, Async/Await
-* **Architecture**: RESTful API, C/S 架构
+### Client (Flutter)
+- `provider`: 状态管理
+- `http`: 网络请求
+- `fl_chart`: 复杂数据可视化 (动态折线图)
+- `shared_preferences`: 本地配置存储
+- `flutter_launcher_icons`: 图标生成
 
-## 🚀 快速开始 (How to Run)
+### Server (Python)
+- `Flask`: 轻量级 Web 框架
+- `psutil`: 跨平台硬件信息采集
+- `GPUtil`: 显卡状态读取
+- `threading`: 多线程监控
 
-### 1. 启动服务端 (Server)
+## 🚀 快速开始 (Quick Start)
 
-确保你安装了 Python 3.x。
+### 1. 服务端部署 (Server Side)
+确保你的服务器或电脑已安装 Python 3.8+。
 
 ```bash
-# 1. 安装依赖
+# 进入服务端目录
+cd server
+
+# 安装依赖
 pip install -r requirements.txt
 
-# 2. 启动探针
+# 启动监控探针 (默认端口 5000)
 python monitor.py
-```
-### 2. 启动客户端 (App)
-确保你安装了 Flutter SDK。
-
-Bash
-cd server_monitor
-flutter pub get
-flutter run
-注意：请在 lib/main.dart 中修改 _baseUrl 为你的电脑局域网 IP。
-<<<<<<< HEAD
-Made with ❤️ by [Lanbo]
-=======
->>>>>>> 6c55fe60ce13be34bcafe8a5dd64bd9f7d7a137f
