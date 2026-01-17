@@ -38,3 +38,4 @@ cd server_monitor
 flutter pub get
 flutter run
 注意：请在 lib/main.dart 中修改 _baseUrl 为你的电脑局域网 IP。
+Made with ❤️ by [Lanbo]
