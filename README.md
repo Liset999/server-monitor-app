@@ -29,7 +29,7 @@ pip install -r requirements.txt
 
 # 2. 启动探针
 python monitor.py
-
+```
 ### 2. 启动客户端 (App)
 确保你安装了 Flutter SDK。
 
@@ -38,4 +38,7 @@ cd server_monitor
 flutter pub get
 flutter run
 注意：请在 lib/main.dart 中修改 _baseUrl 为你的电脑局域网 IP。
+<<<<<<< HEAD
 Made with ❤️ by [Lanbo]
+=======
+>>>>>>> 6c55fe60ce13be34bcafe8a5dd64bd9f7d7a137f
