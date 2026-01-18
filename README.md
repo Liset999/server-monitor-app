@@ -7,7 +7,7 @@
 
 ## 📖 使用方法 (Usage)
 
-1. **PC 端**：在 [Releases](https://www.google.com/search?q=https://github.com/你的用户名/你的仓库名/releases) 下载并运行 `Monitor_Probe.exe`。
+1. **PC 端**：在 [Releases](https://www.google.com/search?q=https://github.com/你的用户名/你的仓库名/releases) 下载并运行 `monitor.exe`。
 2. **手机端**：下载并安装 `ServerMonitor.apk`。
 3. **连接**：电脑端打开后会显示 **配对码**，在手机端输入配对码即可连接。
 4. **注意**：电脑端打开后可以最小化，但**不可以关闭**，否则连接会断开。请勿同时打开两个及以上的 EXE。
