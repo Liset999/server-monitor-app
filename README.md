@@ -82,6 +82,6 @@ flutter run
 
 ## 👨‍💻 作者 (Author)
 
-**<Lanbo>**
+**Lanbo**
 
 - 🎓 专注于系统监控与自动化运维工具开发
