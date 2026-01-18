@@ -28,10 +28,12 @@
 ## ⚠️ 重要说明 (Important Notes)
 
 - **网络环境**：手机与电脑**必须连接同一个 WiFi**，或由手机开启热点供电脑连接。若连接失败，请尝试手动输入电脑 IP 地址。
+- <img width="678" height="585" alt="1cca05493d8264d2c72cfdf4ebb44742" src="https://github.com/user-attachments/assets/8d0def1c-e230-4f37-8774-8072ed998809" />
+**一定要选择允许**
 - **防火墙**：若在公网环境下使用，请确保防火墙已放行相关端口（默认 5000）。
 - **GPU 监测**：温度及负载监测主要通过 **NVIDIA** 接口获取。集成显卡或 AMD 显卡用户可能会出现度数为 0 的情况。
 - **安全性**：设置配对码是为了防止在公网环境下他人未经授权连接并控制你的进程。
-
+- **内存占用**:<img width="974" height="132" alt="e87d41fde0dd054863f25652d2ce279d" src="https://github.com/user-attachments/assets/d9f41668-f141-4d22-beb1-69c47dbff0e1" />
 ------
 
 ## 🛠️ 技术栈 (Tech Stack)
