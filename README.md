@@ -1,6 +1,7 @@
 # 🖥️ Server Monitor (Cross-Platform)
 
 一个现代化的、跨平台的服务器性能监控应用。服务端使用 **Python (Flask + Psutil)** 采集数据，客户端使用 **Flutter** 构建，支持实时波形图、进程管理及远程电源控制。
+实现手机控制电脑进程
 
 ------
 
