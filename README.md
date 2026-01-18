@@ -1,48 +1,87 @@
 # 🖥️ Server Monitor (Cross-Platform)
 
-![Flutter](https://img.shields.io/badge/Flutter-3.0%2B-02569B?logo=flutter)
-![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?logo=python)
-![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android-lightgrey)
-![License](https://img.shields.io/badge/License-MIT-green)
+一个现代化的、跨平台的服务器性能监控应用。服务端使用 **Python (Flask + Psutil)** 采集数据，客户端使用 **Flutter** 构建，支持实时波形图、进程管理及远程电源控制。
 
-一个现代化的、跨平台的服务器性能监控应用。
-服务端使用 **Python (Flask + Psutil)** 采集数据，客户端使用 **Flutter** 构建，支持实时波形图、进程管理及远程电源控制。
+------
+
+## 📖 使用方法 (Usage)
+
+1. **PC 端**：在 [Releases](https://www.google.com/search?q=https://github.com/你的用户名/你的仓库名/releases) 下载并运行 `Monitor_Probe.exe`。
+2. **手机端**：下载并安装 `ServerMonitor.apk`。
+3. **连接**：电脑端打开后会显示 **配对码**，在手机端输入配对码即可连接。
+4. **注意**：电脑端打开后可以最小化，但**不可以关闭**，否则连接会断开。请勿同时打开两个及以上的 EXE。
+
+------
 
 ## ✨ 核心功能 (Features)
 
-- 📊 **实时仪表盘**：毫秒级监控 CPU、内存、磁盘及 GPU 温度。
-- 📈 **动态波形图**：支持 CPU、内存、网络流量 (KB/s, MB/s) 的 60秒 实时趋势。
-- ⚡ **网速监控**：双通道显示上传/下载速率，智能单位切换。
-- 🎮 **进程管理**：查看服务器运行进程，支持按内存排序及**远程杀进程**。
-- 🔌 **远程控制**：支持一键 🔒锁定、🔄重启、🛑关机 (带确认弹窗)。
-- 🎨 **多主题切换**：内置 深海蓝、赛博紫、黑客绿 等 5 款渐变皮肤。
+- 📊 **实时仪表盘**：毫秒级监控 CPU、内存、磁盘使用率。
+- 📈 **动态波形图**：支持查看 CPU、内存、网络流量的 60 秒实时波动趋势。
+- ⚡ **网速监控**：双通道显示上传/下载速率，支持 KB/s 和 MB/s 智能单位切换。
+- 🎮 **进程管理**：实时查看服务器进程，支持远程**强制结束 (Kill)** 异常进程。
+- 🔌 **远程控制**：支持一键远程 🔒锁定、🔄重启、🛑关机 (带确认弹窗)。
+- 🎨 **多主题切换**：内置深海蓝、赛博紫、黑客绿、梦幻极光等 5 款。
+
+------
+
+## ⚠️ 重要说明 (Important Notes)
+
+- **网络环境**：手机与电脑**必须连接同一个 WiFi**，或由手机开启热点供电脑连接。若连接失败，请尝试手动输入电脑 IP 地址。
+- **防火墙**：若在公网环境下使用，请确保防火墙已放行相关端口（默认 5000）。
+- **GPU 监测**：温度及负载监测主要通过 **NVIDIA** 接口获取。集成显卡或 AMD 显卡用户可能会出现度数为 0 的情况。
+- **安全性**：设置配对码是为了防止在公网环境下他人未经授权连接并控制你的进程。
+
+------
 
 ## 🛠️ 技术栈 (Tech Stack)
 
 ### Client (Flutter)
-- `provider`: 状态管理
-- `http`: 网络请求
-- `fl_chart`: 复杂数据可视化 (动态折线图)
-- `shared_preferences`: 本地配置存储
-- `flutter_launcher_icons`: 图标生成
+
+- `fl_chart`: 复杂数据可视化（动态折线图）。
+- `shared_preferences`: 本地连接配置存储。
+- `http`: 异步网络请求处理。
+- `flutter_launcher_icons`: 自动化图标配置。
 
 ### Server (Python)
-- `Flask`: 轻量级 Web 框架
-- `psutil`: 跨平台硬件信息采集
-- `GPUtil`: 显卡状态读取
-- `threading`: 多线程监控
 
-## 🚀 快速开始 (Quick Start)
+- `Flask`: 提供轻量级 API 接口。
+- `psutil`: 跨平台系统硬件信息采集。
+- `GPUtil`: 专门用于 NVIDIA GPU 状态读取。
 
-### 1. 服务端部署 (Server Side)
-确保你的服务器或电脑已安装 Python 3.8+。
+------
 
-```bash
+## 🚀 开发者快速开始 (For Developers)
+
+### 1. 服务端部署
+
+Bash
+
+```
 # 进入服务端目录
 cd server
-
 # 安装依赖
 pip install -r requirements.txt
-
-# 启动监控探针 (默认端口 5000)
+# 启动监控探针
 python monitor.py
+```
+
+### 2. 客户端开发
+
+Bash
+
+```
+# 进入 App 目录
+cd server_monitor
+# 获取 Flutter 依赖
+flutter pub get
+# 运行调试
+flutter run
+```
+
+------
+
+## 👨‍💻 作者 (Author)
+
+**<Lanbo>**
+
+- 🎓 专注于系统监控与自动化运维工具开发
