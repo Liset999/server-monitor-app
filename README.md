@@ -1,44 +1,90 @@
-# Server Monitor (SRE 练手项目)
+# 🖥️ Server Monitor (Cross-Platform)
 
-这是一个基于 **Flutter** (移动端) 和 **Python Flask** (服务端) 开发的局域网服务器监控系统。
-它可以实时监控 Windows 服务器的硬件状态，并支持查看详细的硬件配置信息。
+一个现代化的、跨平台的服务器性能监控应用。服务端使用 **Python (Flask + Psutil)** 采集数据，客户端使用 **Flutter** 构建，支持实时波形图、进程管理及远程电源控制。
+实现手机控制电脑进程
 
-## 📸 功能特性 (Features)
+------
 
-* **实时监控**：每秒刷新 CPU、内存、GPU、磁盘的使用率。
-* **硬件详情**：自动识别 Windows 11/10 版本，精准获取 CPU 型号 (如 AMD Ryzen 9) 及核心数。
-* **智能缓存**：配置信息支持本地缓存，减少网络请求，提升体验。
-* **报警机制**：当 CPU 或 GPU 负载超过 80% 时，App 界面自动变红报警。
-* **交互优化**：支持下拉刷新配置信息，底部弹窗自适应高度。
+## 📖 使用方法 (Usage)
+
+1. **PC 端**：在 [Releases](https://www.google.com/search?q=https://github.com/你的用户名/你的仓库名/releases) 下载并运行 `monitor.exe`。
+2. **手机端**：下载并安装 `ServerMonitor.apk`。
+3. **连接**：电脑端打开后会显示 **配对码**，在手机端输入配对码即可连接。
+4. **注意**：电脑端打开后可以最小化，但**不可以关闭**，否则连接会断开。请勿同时打开两个及以上的 EXE。
+
+------
+
+## ✨ 核心功能 (Features)
+
+- 📊 **实时仪表盘**：毫秒级监控 CPU、内存、磁盘使用率。
+- 📈 **动态波形图**：支持查看 CPU、内存、网络流量的 60 秒实时波动趋势。
+- ⚡ **网速监控**：双通道显示上传/下载速率，支持 KB/s 和 MB/s 智能单位切换。
+- 🎮 **进程管理**：实时查看服务器进程，支持远程**强制结束 (Kill)** 异常进程。
+- 🔌 **远程控制**：支持一键远程 🔒锁定、🔄重启、🛑关机 (带确认弹窗)。
+- 🎨 **多主题切换**：内置深海蓝、赛博紫、黑客绿、梦幻极光等 5 款。
+
+------
+
+## ⚠️ 重要说明 (Important Notes)
+
+- **网络环境**：手机与电脑**必须连接同一个 WiFi**，或由手机开启热点供电脑连接。若连接失败，请尝试手动输入电脑 IP 地址。
+- <img width="678" height="585" alt="1cca05493d8264d2c72cfdf4ebb44742" src="https://github.com/user-attachments/assets/8d0def1c-e230-4f37-8774-8072ed998809" />
+**一定要选择允许**
+- **防火墙**：若在公网环境下使用，请确保防火墙已放行相关端口（默认 5000）。
+- **GPU 监测**：温度及负载监测主要通过 **NVIDIA** 接口获取。集成显卡或 AMD 显卡用户可能会出现度数为 0 的情况。
+- **安全性**：设置配对码是为了防止在公网环境下他人未经授权连接并控制你的进程。
+- **内存占用**:<img width="974" height="132" alt="e87d41fde0dd054863f25652d2ce279d" src="https://github.com/user-attachments/assets/d9f41668-f141-4d22-beb1-69c47dbff0e1" />
+------
 
 ## 🛠️ 技术栈 (Tech Stack)
 
-* **Backend**: Python 3, Flask, psutil, GPUtil, py-cpuinfo
-* **Frontend**: Flutter, Dart, HTTP, Async/Await
-* **Architecture**: RESTful API, C/S 架构
+### Client (Flutter)
 
-## 🚀 快速开始 (How to Run)
+- `fl_chart`: 复杂数据可视化（动态折线图）。
+- `shared_preferences`: 本地连接配置存储。
+- `http`: 异步网络请求处理。
+- `flutter_launcher_icons`: 自动化图标配置。
 
-### 1. 启动服务端 (Server)
+### Server (Python)
 
-确保你安装了 Python 3.x。
+- `Flask`: 提供轻量级 API 接口。
+- `psutil`: 跨平台系统硬件信息采集。
+- `GPUtil`: 专门用于 NVIDIA GPU 状态读取。
 
-```bash
-# 1. 安装依赖
-pip install -r requirements.txt
+------
 
-# 2. 启动探针
-python monitor.py
-```
-### 2. 启动客户端 (App)
-确保你安装了 Flutter SDK。
+## 🚀 开发者快速开始 (For Developers)
+
+### 1. 服务端部署
 
 Bash
+
+```
+# 进入服务端目录
+cd server
+# 安装依赖
+pip install -r requirements.txt
+# 启动监控探针
+python monitor.py
+```
+
+### 2. 客户端开发
+
+Bash
+
+```
+# 进入 App 目录
 cd server_monitor
+# 获取 Flutter 依赖
 flutter pub get
+# 运行调试
 flutter run
-注意：请在 lib/main.dart 中修改 _baseUrl 为你的电脑局域网 IP。
-<<<<<<< HEAD
-Made with ❤️ by [Lanbo]
-=======
->>>>>>> 6c55fe60ce13be34bcafe8a5dd64bd9f7d7a137f
+```
+
+------
+
+## 👨‍💻 作者 (Author)
+
+**Lanbo**
+
+- 🎓 专注于系统监控与自动化运维工具开发
