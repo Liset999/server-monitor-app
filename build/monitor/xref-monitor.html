@@ -155,6 +155,7 @@ imports:
  &#8226;   <a href="#encodings.zlib_codec">encodings.zlib_codec</a>
  &#8226;   <a href="#enum">enum</a>
  &#8226;   <a href="#flask">flask</a>
+ &#8226;   <a href="#flask_cors">flask_cors</a>
  &#8226;   <a href="#functools">functools</a>
  &#8226;   <a href="#genericpath">genericpath</a>
  &#8226;   <a href="#heapq">heapq</a>
@@ -355,8 +356,8 @@ imported by:
   <a target="code" href="" type="text/plain"><tt>'Xlib.display'</tt></a>
 <span class="moduletype">MissingModule</span>  <div class="import">
 imported by:
-    <a href="#mouseinfo">mouseinfo</a>
- &#8226;   <a href="#pyautogui._pyautogui_x11">pyautogui._pyautogui_x11</a>
+    <a href="#pyautogui._pyautogui_x11">pyautogui._pyautogui_x11</a>
+ &#8226;   <a href="#pystray._xorg">pystray._xorg</a>
 
   </div>
 
@@ -3131,8 +3132,8 @@ imported by:
   <a target="code" href="" type="text/plain"><tt>Xlib</tt></a>
 <span class="moduletype">MissingModule</span>  <div class="import">
 imported by:
-    <a href="#pyautogui._pyautogui_x11">pyautogui._pyautogui_x11</a>
- &#8226;   <a href="#pystray._xorg">pystray._xorg</a>
+    <a href="#mouseinfo">mouseinfo</a>
+ &#8226;   <a href="#pyautogui._pyautogui_x11">pyautogui._pyautogui_x11</a>
 
   </div>
 
@@ -6847,6 +6848,7 @@ imported by:
  &#8226;   <a href="#flask.cli">flask.cli</a>
  &#8226;   <a href="#flask.sessions">flask.sessions</a>
  &#8226;   <a href="#flask.typing">flask.typing</a>
+ &#8226;   <a href="#flask_cors.core">flask_cors.core</a>
  &#8226;   <a href="#http.client">http.client</a>
  &#8226;   <a href="#importlib_metadata">importlib_metadata</a>
  &#8226;   <a href="#importlib_metadata._meta">importlib_metadata._meta</a>
@@ -8683,6 +8685,8 @@ imported by:
 imports:
     <a href="#_ctypes">_ctypes</a>
  &#8226;   <a href="#ctypes._endian">ctypes._endian</a>
+ &#8226;   <a href="#ctypes.util">ctypes.util</a>
+ &#8226;   <a href="#ctypes.wintypes">ctypes.wintypes</a>
  &#8226;   <a href="#nt">nt</a>
  &#8226;   <a href="#os">os</a>
  &#8226;   <a href="#struct">struct</a>
@@ -8856,7 +8860,8 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#darkdetect._mac_detect">darkdetect._mac_detect</a>
+    <a href="#ctypes">ctypes</a>
+ &#8226;   <a href="#darkdetect._mac_detect">darkdetect._mac_detect</a>
  &#8226;   <a href="#mouseinfo">mouseinfo</a>
  &#8226;   <a href="#watchdog.observers.inotify_c">watchdog.observers.inotify_c</a>
 
@@ -8876,6 +8881,7 @@ imports:
 imported by:
     <a href="#click._winconsole">click._winconsole</a>
  &#8226;   <a href="#colorama.win32">colorama.win32</a>
+ &#8226;   <a href="#ctypes">ctypes</a>
  &#8226;   <a href="#customtkinter.windows.widgets.scaling.scaling_tracker">customtkinter.windows.widgets.scaling.scaling_tracker</a>
  &#8226;   <a href="#darkdetect._windows_detect">darkdetect._windows_detect</a>
  &#8226;   <a href="#pyautogui._pyautogui_win">pyautogui._pyautogui_win</a>
@@ -10160,6 +10166,7 @@ imported by:
  &#8226;   <a href="#flask.json.tag">flask.json.tag</a>
  &#8226;   <a href="#flask.sansio.app">flask.sansio.app</a>
  &#8226;   <a href="#flask.sessions">flask.sessions</a>
+ &#8226;   <a href="#flask_cors.core">flask_cors.core</a>
  &#8226;   <a href="#http.cookiejar">http.cookiejar</a>
  &#8226;   <a href="#http.server">http.server</a>
  &#8226;   <a href="#itsdangerous.exc">itsdangerous.exc</a>
@@ -13588,6 +13595,9 @@ imported by:
  &#8226;   <a href="#flask.testing">flask.testing</a>
  &#8226;   <a href="#flask.typing">flask.typing</a>
  &#8226;   <a href="#flask.wrappers">flask.wrappers</a>
+ &#8226;   <a href="#flask_cors.core">flask_cors.core</a>
+ &#8226;   <a href="#flask_cors.decorator">flask_cors.decorator</a>
+ &#8226;   <a href="#flask_cors.extension">flask_cors.extension</a>
  &#8226;   <a href="#monitor.py">monitor.py</a>
 
   </div>
@@ -14280,6 +14290,108 @@ imported by:
 </div>
 
 <div class="node">
+  <a name="flask_cors"></a>
+  <a target="code" href="///C:/Users/ROG/AppData/Local/Programs/Python/Python39/lib/site-packages/flask_cors/__init__.py" type="text/plain"><tt>flask_cors</tt></a>
+<span class="moduletype">Package</span>  <div class="import">
+imports:
+    <a href="#flask_cors.decorator">flask_cors.decorator</a>
+ &#8226;   <a href="#flask_cors.extension">flask_cors.extension</a>
+ &#8226;   <a href="#flask_cors.version">flask_cors.version</a>
+ &#8226;   <a href="#logging">logging</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#flask_cors.core">flask_cors.core</a>
+ &#8226;   <a href="#flask_cors.decorator">flask_cors.decorator</a>
+ &#8226;   <a href="#flask_cors.extension">flask_cors.extension</a>
+ &#8226;   <a href="#flask_cors.version">flask_cors.version</a>
+ &#8226;   <a href="#monitor.py">monitor.py</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="flask_cors.core"></a>
+  <a target="code" href="///C:/Users/ROG/AppData/Local/Programs/Python/Python39/lib/site-packages/flask_cors/core.py" type="text/plain"><tt>flask_cors.core</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#collections.abc">collections.abc</a>
+ &#8226;   <a href="#datetime">datetime</a>
+ &#8226;   <a href="#flask">flask</a>
+ &#8226;   <a href="#flask_cors">flask_cors</a>
+ &#8226;   <a href="#logging">logging</a>
+ &#8226;   <a href="#re">re</a>
+ &#8226;   <a href="#werkzeug.datastructures">werkzeug.datastructures</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#flask_cors.decorator">flask_cors.decorator</a>
+ &#8226;   <a href="#flask_cors.extension">flask_cors.extension</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="flask_cors.decorator"></a>
+  <a target="code" href="///C:/Users/ROG/AppData/Local/Programs/Python/Python39/lib/site-packages/flask_cors/decorator.py" type="text/plain"><tt>flask_cors.decorator</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#flask">flask</a>
+ &#8226;   <a href="#flask_cors">flask_cors</a>
+ &#8226;   <a href="#flask_cors.core">flask_cors.core</a>
+ &#8226;   <a href="#functools">functools</a>
+ &#8226;   <a href="#logging">logging</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#flask_cors">flask_cors</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="flask_cors.extension"></a>
+  <a target="code" href="///C:/Users/ROG/AppData/Local/Programs/Python/Python39/lib/site-packages/flask_cors/extension.py" type="text/plain"><tt>flask_cors.extension</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#flask">flask</a>
+ &#8226;   <a href="#flask_cors">flask_cors</a>
+ &#8226;   <a href="#flask_cors.core">flask_cors.core</a>
+ &#8226;   <a href="#logging">logging</a>
+ &#8226;   <a href="#urllib.parse">urllib.parse</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#flask_cors">flask_cors</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="flask_cors.version"></a>
+  <a target="code" href="///C:/Users/ROG/AppData/Local/Programs/Python/Python39/lib/site-packages/flask_cors/version.py" type="text/plain"><tt>flask_cors.version</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#flask_cors">flask_cors</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#flask_cors">flask_cors</a>
+
+  </div>
+
+</div>
+
+<div class="node">
   <a name="fnmatch"></a>
   <a target="code" href="///C:/Users/ROG/AppData/Local/Programs/Python/Python39/lib/fnmatch.py" type="text/plain"><tt>fnmatch</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
@@ -14400,6 +14512,7 @@ imported by:
  &#8226;   <a href="#flask.helpers">flask.helpers</a>
  &#8226;   <a href="#flask.sansio.blueprints">flask.sansio.blueprints</a>
  &#8226;   <a href="#flask.sansio.scaffold">flask.sansio.scaffold</a>
+ &#8226;   <a href="#flask_cors.decorator">flask_cors.decorator</a>
  &#8226;   <a href="#fnmatch">fnmatch</a>
  &#8226;   <a href="#http.server">http.server</a>
  &#8226;   <a href="#importlib.metadata">importlib.metadata</a>
@@ -16796,6 +16909,10 @@ imported by:
  &#8226;   <a href="#concurrent.futures._base">concurrent.futures._base</a>
  &#8226;   <a href="#flask.logging">flask.logging</a>
  &#8226;   <a href="#flask.sansio.app">flask.sansio.app</a>
+ &#8226;   <a href="#flask_cors">flask_cors</a>
+ &#8226;   <a href="#flask_cors.core">flask_cors.core</a>
+ &#8226;   <a href="#flask_cors.decorator">flask_cors.decorator</a>
+ &#8226;   <a href="#flask_cors.extension">flask_cors.extension</a>
  &#8226;   <a href="#hashlib">hashlib</a>
  &#8226;   <a href="#http.cookiejar">http.cookiejar</a>
  &#8226;   <a href="#jinja2.runtime">jinja2.runtime</a>
@@ -17007,12 +17124,12 @@ imported by:
   <a target="code" href="///C:/Users/ROG/AppData/Local/Programs/Python/Python39/lib/site-packages/mouseinfo/__init__.py" type="text/plain"><tt>mouseinfo</tt></a>
 <span class="moduletype">Package</span>  <div class="import">
 imports:
-    <a href="#'Xlib.display'">'Xlib.display'</a>
- &#8226;   <a href="#'rubicon.objc'">'rubicon.objc'</a>
+    <a href="#'rubicon.objc'">'rubicon.objc'</a>
  &#8226;   <a href="#PIL">PIL</a>
  &#8226;   <a href="#PIL.Image">PIL.Image</a>
  &#8226;   <a href="#PIL.ImageGrab">PIL.ImageGrab</a>
  &#8226;   <a href="#Tkinter">Tkinter</a>
+ &#8226;   <a href="#Xlib">Xlib</a>
  &#8226;   <a href="#ctypes">ctypes</a>
  &#8226;   <a href="#ctypes.util">ctypes.util</a>
  &#8226;   <a href="#datetime">datetime</a>
@@ -24856,11 +24973,6 @@ imported by:
   <a name="packaging"></a>
   <a target="code" href="///C:/Users/ROG/AppData/Local/Programs/Python/Python39/lib/site-packages/packaging/__init__.py" type="text/plain"><tt>packaging</tt></a>
 <span class="moduletype">Package</span>  <div class="import">
-imports:
-    <a href="#packaging.version">packaging.version</a>
-
-  </div>
-  <div class="import">
 imported by:
     <a href="#customtkinter.windows.ctk_tk">customtkinter.windows.ctk_tk</a>
  &#8226;   <a href="#customtkinter.windows.ctk_toplevel">customtkinter.windows.ctk_toplevel</a>
@@ -24905,7 +25017,6 @@ imported by:
     <a href="#PIL.ImageFont">PIL.ImageFont</a>
  &#8226;   <a href="#customtkinter.windows.ctk_tk">customtkinter.windows.ctk_tk</a>
  &#8226;   <a href="#customtkinter.windows.ctk_toplevel">customtkinter.windows.ctk_toplevel</a>
- &#8226;   <a href="#packaging">packaging</a>
 
   </div>
 
@@ -26056,9 +26167,9 @@ imported by:
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#'Xlib.XK'">'Xlib.XK'</a>
+ &#8226;   <a href="#'Xlib.display'">'Xlib.display'</a>
  &#8226;   <a href="#'Xlib.threaded'">'Xlib.threaded'</a>
  &#8226;   <a href="#PIL">PIL</a>
- &#8226;   <a href="#Xlib">Xlib</a>
  &#8226;   <a href="#contextlib">contextlib</a>
  &#8226;   <a href="#functools">functools</a>
  &#8226;   <a href="#pystray">pystray</a>
@@ -26513,6 +26624,7 @@ imported by:
  &#8226;   <a href="#email.utils">email.utils</a>
  &#8226;   <a href="#encodings.idna">encodings.idna</a>
  &#8226;   <a href="#flask.cli">flask.cli</a>
+ &#8226;   <a href="#flask_cors.core">flask_cors.core</a>
  &#8226;   <a href="#fnmatch">fnmatch</a>
  &#8226;   <a href="#fractions">fractions</a>
  &#8226;   <a href="#ftplib">ftplib</a>
@@ -27972,6 +28084,7 @@ imports:
  &#8226;   <a href="#tkinter.commondialog">tkinter.commondialog</a>
  &#8226;   <a href="#tkinter.constants">tkinter.constants</a>
  &#8226;   <a href="#tkinter.messagebox">tkinter.messagebox</a>
+ &#8226;   <a href="#tkinter.ttk">tkinter.ttk</a>
  &#8226;   <a href="#traceback">traceback</a>
  &#8226;   <a href="#types">types</a>
 
@@ -28155,6 +28268,7 @@ imports:
 imported by:
     <a href="#customtkinter.windows.widgets.core_widget_classes.ctk_base_class">customtkinter.windows.widgets.core_widget_classes.ctk_base_class</a>
  &#8226;   <a href="#mouseinfo">mouseinfo</a>
+ &#8226;   <a href="#tkinter">tkinter</a>
 
   </div>
 
@@ -29090,6 +29204,7 @@ imported by:
  &#8226;   <a href="#email.utils">email.utils</a>
  &#8226;   <a href="#flask.app">flask.app</a>
  &#8226;   <a href="#flask.testing">flask.testing</a>
+ &#8226;   <a href="#flask_cors.extension">flask_cors.extension</a>
  &#8226;   <a href="#http.client">http.client</a>
  &#8226;   <a href="#http.cookiejar">http.cookiejar</a>
  &#8226;   <a href="#http.server">http.server</a>
@@ -30182,6 +30297,7 @@ imported by:
     <a href="#flask.app">flask.app</a>
  &#8226;   <a href="#flask.sessions">flask.sessions</a>
  &#8226;   <a href="#flask.typing">flask.typing</a>
+ &#8226;   <a href="#flask_cors.core">flask_cors.core</a>
  &#8226;   <a href="#werkzeug.datastructures.accept">werkzeug.datastructures.accept</a>
  &#8226;   <a href="#werkzeug.datastructures.auth">werkzeug.datastructures.auth</a>
  &#8226;   <a href="#werkzeug.datastructures.cache_control">werkzeug.datastructures.cache_control</a>

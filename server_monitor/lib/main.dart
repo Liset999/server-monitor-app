@@ -6,6 +6,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fl_chart/fl_chart.dart'; // 必须先运行 flutter pub add fl_chart
+import 'touchpad_page.dart'; // 引入刚才新建的文件
+import 'screen_tablet_page.dart';
+import 'file_explorer_page.dart'; // 👈 引入文件管理页面
 
 void main() {
   runApp(const MonitorApp());
@@ -169,12 +172,10 @@ class _MonitorScreenState extends State<MonitorScreen> {
   Future<void> _fetchSpecs() async {
     if (_baseUrl.isEmpty) return;
     try {
-      final response = await http
-          .get(
-            Uri.parse('$_baseUrl/specs'),
-            headers: {'X-Secret-Code': _secretCode},
-          )
-          .timeout(const Duration(seconds: 7));
+      final response = await http.get(
+        Uri.parse('$_baseUrl/specs'),
+        headers: {'X-Secret-Code': _secretCode},
+      ).timeout(const Duration(seconds: 7));
       if (response.statusCode == 200)
         setState(() {
           _specs = jsonDecode(response.body);
@@ -203,9 +204,8 @@ class _MonitorScreenState extends State<MonitorScreen> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: action == 'shutdown'
-                  ? Colors.red
-                  : Colors.orange,
+              backgroundColor:
+                  action == 'shutdown' ? Colors.red : Colors.orange,
             ),
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text("确定"),
@@ -274,12 +274,10 @@ class _MonitorScreenState extends State<MonitorScreen> {
   Future<void> _fetchStatus() async {
     if (_baseUrl.isEmpty) return;
     try {
-      final response = await http
-          .get(
-            Uri.parse('$_baseUrl/status'),
-            headers: {'X-Secret-Code': _secretCode},
-          )
-          .timeout(const Duration(seconds: 2));
+      final response = await http.get(
+        Uri.parse('$_baseUrl/status'),
+        headers: {'X-Secret-Code': _secretCode},
+      ).timeout(const Duration(seconds: 2));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         double cpuVal = double.parse((data['cpu'] ?? 0).toString());
@@ -293,9 +291,8 @@ class _MonitorScreenState extends State<MonitorScreen> {
           _cpu = cpuVal.toStringAsFixed(1);
           _ram = ramVal.toStringAsFixed(1);
           _gpu = gpuVal.toStringAsFixed(1);
-          _gpuTemp = tempVal > 0
-              ? "${tempVal.toStringAsFixed(0)}°C"
-              : ""; // 只有大于0才显示
+          _gpuTemp =
+              tempVal > 0 ? "${tempVal.toStringAsFixed(0)}°C" : ""; // 只有大于0才显示
           _statusText = "🟢 实时监控中";
           _statusColor = Colors.greenAccent;
 
@@ -425,7 +422,6 @@ class _MonitorScreenState extends State<MonitorScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-
                   SizedBox(
                     height: 200,
                     child: LineChart(
@@ -590,8 +586,118 @@ class _MonitorScreenState extends State<MonitorScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            TaskManagerScreen(baseUrl: _baseUrl, secretCode: _secretCode),
+        // 🔴 之前这里写错了，写成了 TouchpadPage
+        // ✅ 改成下面这样：
+        builder: (context) => TaskManagerScreen(
+          baseUrl: _baseUrl,
+          secretCode: _secretCode,
+        ),
+      ),
+    );
+  }
+
+// --- 左侧抽屉菜单 ---
+  Widget _buildDrawer() {
+    return Drawer(
+      backgroundColor: const Color(0xFF1E293B),
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blueAccent, Color(0xFF1E293B)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CircleAvatar(
+                  backgroundColor: Colors.white24,
+                  radius: 30,
+                  child: Icon(Icons.dns, size: 35, color: Colors.white),
+                ),
+                const SizedBox(height: 15),
+                const Text(
+                  "功能菜单",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  _baseUrl.isEmpty ? "未连接" : _baseUrl,
+                  style: const TextStyle(color: Colors.white54, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.mouse, color: Colors.blueAccent),
+            title:
+                const Text("鼠标 / 触控板", style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.pop(context); // 关掉侧边栏
+              // 跳转到触控板
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TouchpadPage(
+                    serverUrl: _baseUrl,
+                    secretCode: _secretCode,
+                  ),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.list_alt, color: Colors.orangeAccent),
+            title: const Text("任务管理器", style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.pop(context); // 关掉侧边栏
+              _openTaskManager(); // 调用修复后的函数
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.draw, color: Colors.deepPurpleAccent),
+            title: const Text("远控电脑", style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.pop(context); // 关掉侧边栏
+              // 跳转到新的数位屏页面
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ScreenTabletPage(
+                    // 👈 这是我们下一步要新建的页面
+                    serverUrl: _baseUrl,
+                    secretCode: _secretCode,
+                  ),
+                ),
+              );
+            },
+          ),
+
+          // 🔥🔥🔥 新增：私有云盘入口 🔥🔥🔥
+          ListTile(
+            leading: const Icon(Icons.cloud_download_rounded,
+                color: Colors.cyanAccent),
+            title: const Text("私有云盘", style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.pop(context); // 关掉侧边栏
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FileExplorerPage(
+                    serverUrl: _baseUrl,
+                    secretCode: _secretCode,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -602,6 +708,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
       decoration: _backgrounds[_bgIndex],
       child: Scaffold(
         backgroundColor: Colors.transparent,
+        drawer: _buildDrawer(),
         appBar: AppBar(
           title: const Text('Server Monitor'),
           centerTitle: true,
@@ -610,10 +717,10 @@ class _MonitorScreenState extends State<MonitorScreen> {
               icon: const Icon(Icons.palette_outlined, color: Colors.white),
               onPressed: _changeBackground,
             ),
-            IconButton(
-              icon: const Icon(Icons.list_alt, color: Colors.blueAccent),
-              onPressed: _openTaskManager,
-            ),
+            // IconButton(
+            //   icon: const Icon(Icons.list_alt, color: Colors.blueAccent),
+            //   onPressed: _openTaskManager,
+            // ),
             IconButton(
               icon: const Icon(Icons.link, color: Colors.white),
               onPressed: () => _showAuthDialog(),

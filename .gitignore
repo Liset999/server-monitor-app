@@ -1,0 +1,11 @@
+# 忽略配置文件（包含你的私人配对码）
+config.json
+
+# 忽略 Python 运行产生的缓存垃圾
+__pycache__/
+*.pyc
+
+# 忽略打包产生的临时文件 (为之后打包 EXE 做准备)
+dist/
+build/
+*.spec
